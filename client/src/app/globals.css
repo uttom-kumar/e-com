@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: #f0f2f5 !important;
+  font-family: "Poppins", sans-serif;
+}
+
+
+h2{
+  font-size:  30px !important;
+}
+
+.title{
+  font-size: 14px !important;
+}
+
+
+.image-gallery-image {
+  aspect-ratio: 16/9 !important;
+  object-fit: contain;
+
+}
+
+
+.btn1{
+  padding: 10px 50px !important;
+  cursor: pointer !important;
+  background-color: blue !important;
+  color: white !important;
+  border-radius: 10px !important;
+}
+
