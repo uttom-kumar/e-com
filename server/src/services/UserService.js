@@ -65,7 +65,7 @@ export const RegisterService = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             status: "failed",
-            message: "Something went wrong",
+            message: "Something went wrong!",
             error: err.toString()
         });
     }
