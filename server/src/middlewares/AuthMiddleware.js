@@ -18,8 +18,10 @@ export const AuthMiddleware = (req, res, next) => {
     else{
         let email = decoded['email']
         let user_id = decoded['user_id']
+        let role =  decoded['role']
         req.headers.email = email
         req.headers.user_id = user_id
+        req.headers.role = role
         next()
     }
 }

@@ -2,6 +2,7 @@ import express from 'express'
 const router = express.Router()
 
 import * as UserController from "../controllers/UserController.js"
+import {AuthMiddleware} from "../middlewares/AuthMiddleware.js";
 
 
 
@@ -16,6 +17,7 @@ router.post('/SendOTP',UserController.SendOTP)
 router.post('/VerifyOTP',UserController.VerifyOTP)
 router.post('/RecoverPassword',UserController.RecoverPassword)
 
+router.get('/UserReadProfile', AuthMiddleware, UserController.UserReadProfile)
 
 
 

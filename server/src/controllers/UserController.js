@@ -1,7 +1,7 @@
 import {
     LoginService,
     RecoverPasswordService,
-    RegisterService, SendOTPService, VerifyOTPService,
+    RegisterService, SendOTPService, UserReadProfileService, VerifyOTPService,
 } from "../services/UserService.js";
 
 
@@ -13,6 +13,9 @@ export const Login = async (req, res) => {
     await LoginService(req, res)
 }
 
+export const UserReadProfile = async (req, res) => {
+    await UserReadProfileService(req, res)
+}
 
 
 export const  SendOTP = async (req, res) => {

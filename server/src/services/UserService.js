@@ -136,7 +136,6 @@ export const LoginService = async (req, res) => {
     }
 };
 
-
 export const SendOTPService = async (req, res) => {
     try {
         const { email } = req.body;
@@ -291,6 +290,46 @@ export const RecoverPasswordService = async (req, res) => {
         })
     }
 }
+
+
+
+// user profile update
+export const UserReadProfileService = async (req, res) => {
+    try {
+        const userID =new ObjectId(req.headers['user_id']);
+
+        const matchStage = [
+            {
+                $match : {_id: userID}
+            }
+        ]
+
+
+        const user = await UserModel.aggregate([
+            matchStage
+        ])
+
+        if (!user) {
+            return res.status(400).json({
+                status: "failed",
+                message: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            message: "User profile read successfully",
+            data: user
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong!",
+            error: err.toString()
+        });
+    }
+};
+
 
 
 
