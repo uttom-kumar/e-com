@@ -18,6 +18,9 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const {JWT_EXPIRE_TIME} = process.env;
+
+
 
 
 
@@ -73,6 +76,66 @@ export const RegisterService = async (req, res) => {
         });
     }
 };
+
+export const LoginService = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // 1. Check if user exists
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(400).json({
+                status: "failed",
+                message: "User not found"
+            });
+        }
+
+        // 2. Get user's password
+        const userPassword = await UserPasswordModel.findOne({ userID: user._id });
+        if (!userPassword) {
+            return res.status(400).json({
+                status: "failed",
+                message: "Password record not found"
+            });
+        }
+
+        // 3. Validate password
+        const isPasswordValid = await bcrypt.compare(password, userPassword.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                status: "failed",
+                message: "Password does not match"
+            });
+        }
+
+        // 4. Create token
+        const token = EncodedToken(user.email, user._id, user.role);
+
+        // 5. Set token in cookie
+        const options = {
+            maxAge: JWT_EXPIRE_TIME,
+            httpOnly: false,
+            sameSite: "None",
+            secure: true
+        };
+        res.cookie("token", token, options);
+
+        // 6. Return response
+        return res.status(200).json({
+            status: "success",
+            message: "Login Successfully",
+            token: token
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong!",
+            error: err.toString()
+        });
+    }
+};
+
 
 export const SendOTPService = async (req, res) => {
     try {
@@ -221,29 +284,6 @@ export const RecoverPasswordService = async (req, res) => {
         });
 
     }catch (err){
-        return res.status(500).json({
-            status: "failed",
-            message: "Something went wrong!",
-            error: err.toString()
-        })
-    }
-}
-
-
-
-
-export const LoginService = async (req, res) => {
-    try{
-        const {email, password} = req.body;
-
-
-
-        return res.status(200).json({
-            status: "success",
-            message: "Login successful!"
-        })
-    }
-    catch (err) {
         return res.status(500).json({
             status: "failed",
             message: "Something went wrong!",

@@ -9,6 +9,7 @@ import * as UserController from "../controllers/UserController.js"
 
 // user API
 router.post('/Register',UserController.Register)
+router.post('/Login',UserController.Login)
 
 
 router.post('/SendOTP',UserController.SendOTP)
