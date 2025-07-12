@@ -1,8 +1,10 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const DataSchema = mongoose.Schema({
-    userID: {type : mongoose.Schema.Types.ObjectId,  required : true}
+const OtpSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    otp: { type: String, required: true },
+    otpSentAt: { type: Date, default: Date.now },
+    otpExpireAt: { type: Date, required: true }
+}, { versionKey: false });
 
-}, {timestamps : true, versionKey : false})
-
-export const OtpModel = mongoose.model('otp', DataSchema)
+export const OtpModel = mongoose.model("otps", OtpSchema);

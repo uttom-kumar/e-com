@@ -1,13 +1,15 @@
 import {UserModel} from "../models/UserModel.js";
 import {EncodedToken} from "../utility/TokenUtility.js";
+import bcrypt from 'bcrypt';
 import mongoose from "mongoose";
 const ObjectId = mongoose.Types.ObjectId;
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 dotenv.config();
-import bcrypt from 'bcryptjs';
+
 import {EmailSend} from "../utility/EmailUtility.js";
 import {UserPasswordModel} from "../models/userPasswordModel.js";
+import {OtpModel} from "../models/OtpModel.js";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -41,8 +43,9 @@ export const RegisterService = async (req, res) => {
         const userInstance = new UserModel(reqBody);
 
         const passwordInstance = new UserPasswordModel({
-            userID: userInstance._id,
-            password: reqBody.password
+            userID: userInstance['_id'],
+            password: reqBody.password,
+            oldPassword: reqBody.password,
         });
 
         try {
@@ -70,6 +73,184 @@ export const RegisterService = async (req, res) => {
         });
     }
 };
+
+export const SendOTPService = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({
+                status: "failed",
+                message: "Email not found"
+            });
+        }
+
+        // Rate limit check
+        const now = new Date();
+        const existingOtp = await OtpModel.findOne({ email });
+        if (existingOtp && now - existingOtp.otpSentAt < 60 * 1000) {
+            return res.status(429).json({
+                status: "failed",
+                message: "Please wait 1 minute before requesting a new code."
+            });
+        }
+
+        // Generate 6-digit OTP
+        const code = Math.floor(100000 + Math.random() * 900000);
+        const EmailTo = email;
+        const EmailText = `${code}`;
+        const EmailSubject = `${process.env.APP_NAME || 'MyApp'} - Email Verification Code`;
+
+        await EmailSend(EmailTo, EmailText, EmailSubject);
+
+        await OtpModel.updateOne(
+            { email },
+            {
+                $set: {
+                    otp: code,
+                    otpSentAt: now,
+                    otpExpireAt: new Date(now.getTime() + 5 * 60 * 1000)
+                }
+            },
+            { upsert: true }
+        );
+
+        return res.status(201).json({
+            status: "success",
+            message: "6-digit code sent successfully"
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong!",
+            error: err.toString()
+        });
+    }
+};
+
+export const VerifyOTPService = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        const record = await OtpModel.findOne({ email });
+
+        if (!record || record.otp !== otp) {
+            return res.status(400).json({
+                status: "failed",
+                message: "Invalid or expired OTP"
+            });
+        }
+
+        if (new Date() > record.otpExpireAt) {
+            await OtpModel.updateOne({ email }, { $set: { otp: null } });
+
+            return res.status(400).json({
+                status: "failed",
+                message: "OTP expired. Please request a new one."
+            });
+        }
+
+        // Success
+        await OtpModel.updateOne({ email }, { $set: { otp: otp } });
+
+        return res.status(200).json({
+            status: "success",
+            message: "OTP verified successfully"
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong!",
+            error: err.toString()
+        });
+    }
+};
+
+export const RecoverPasswordService = async (req, res) => {
+    try {
+        const {email, password, otp} = req.body;
+
+        const user =  await UserModel.findOne({ email : email });
+
+        if(!user) {
+            return res.status(400).json({
+                status: "failed",
+                message: "Email not found"
+            })
+        }
+
+        if(password.length < 8) {
+            return res.status(400).json({
+                status: "failed",
+                message: "Password must be at least 8 characters"
+            })
+        }
+
+        const findUserOtp = await OtpModel.findOne({email: email})
+        const validOTP = findUserOtp?.['otp']
+        if(validOTP !== otp) {
+            return res.status(400).json({
+                status: "failed",
+                message: "Invalid Otp"
+            })
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await UserPasswordModel.updateOne(
+            { userID : user._id },
+            {
+                $set: {
+                    password: hashedPassword,
+                }
+            }
+        )
+
+        await OtpModel.updateOne({ email }, {
+            $set: {
+                otp : null
+            }
+        })
+
+        return res.status(200).json({
+            status: "success",
+            message: "Password updated successfully"
+        });
+
+    }catch (err){
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong!",
+            error: err.toString()
+        })
+    }
+}
+
+
+
+
+export const LoginService = async (req, res) => {
+    try{
+        const {email, password} = req.body;
+
+
+
+        return res.status(200).json({
+            status: "success",
+            message: "Login successful!"
+        })
+    }
+    catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong!",
+            error: err.toString()
+        })
+    }
+}
 
 
 

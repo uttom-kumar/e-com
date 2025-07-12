@@ -18,7 +18,7 @@ export const EmailSend = async (EmailTo, EmailText, EmailSubject) => {
     })
 
     let mailOption = {
-        from : `MERN Ecommerce  ${EMAIL_USER}`,
+        from : `E-Com Service${EMAIL_USER}`,
         to : EmailTo,
         subject : EmailSubject,
         html: `<!DOCTYPE html>
@@ -96,11 +96,11 @@ export const EmailSend = async (EmailTo, EmailText, EmailSubject) => {
 
               <div class="container">
                 <div class="header">
-                  <h1>Welcome to Z-Media Service</h1>
+                  <h1>Welcome to E-COM Service</h1>
                 </div>
 
                 <div class="content">
-                  <h2>If you requested to reset password in to your z-media Account, ${EmailTo}</h2>
+                  <h2> Your Account, ${EmailTo}</h2>
                   <p>use the code below. Your OTP code is: </p>
                   <p class="strong_text"><strong>${EmailText}</strong></p>
                   <p>Never share your email, OTP, or any confidential details with anyone. We will never ask for this information. Stay safe!</p>
@@ -109,7 +109,7 @@ export const EmailSend = async (EmailTo, EmailText, EmailSubject) => {
 
                 <div class="footer">
                   <p>Thanks</p>
-                  <p>&copy; 2025 Z-Media. All rights reserved.</p>
+                  <p>&copy;e-com service. All rights reserved.</p>
                 </div>
               </div>
 

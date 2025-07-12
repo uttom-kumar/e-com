@@ -11,6 +11,11 @@ import * as UserController from "../controllers/UserController.js"
 router.post('/Register',UserController.Register)
 
 
+router.post('/SendOTP',UserController.SendOTP)
+router.post('/VerifyOTP',UserController.VerifyOTP)
+router.post('/RecoverPassword',UserController.RecoverPassword)
+
+
 
 
 
