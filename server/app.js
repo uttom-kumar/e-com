@@ -26,9 +26,9 @@ app.use(mongoSanitize())
 app.use(helmet())
 
 app.use(cors({
-    origin: "*",
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
+  origin: "*",
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
 }));
 
 
@@ -44,15 +44,15 @@ app.set('etag' , WEB_CACHE === 'false')
 
 
 app.use(fileUpload({
-    useTempFiles: false
+  useTempFiles: false
 }))
 
 /* ------ ------ */
 // TODO : MONGODB/MONGOOSE CONFIGURATION
 let URL = DATABASE
 let OPTION = {
-    user: '', pass: '',
-    autoIndex : true,
+  user: '', pass: '',
+  autoIndex : true,
 }
 mongoose.connect(URL, OPTION).then(()=> {
     try{
