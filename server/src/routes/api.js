@@ -18,6 +18,7 @@ router.post('/VerifyOTP',UserController.VerifyOTP)
 router.post('/RecoverPassword',UserController.RecoverPassword)
 
 router.get('/UserReadProfile', AuthMiddleware, UserController.UserReadProfile)
+router.post('/UpdateProfile', AuthMiddleware, UserController.UpdateProfile)
 
 
 
