@@ -6,11 +6,11 @@ const DataSchema = mongoose.Schema({
     price : {type: String, required: true},
     discount : {type: Boolean, required: true},
     discountPrice : {type: String, required: true},
-    productCode : {type: String, required: true},
+    productCode : {type: String, required: true, unique:true},
     remark : {type: String, default: ''},
 
+    userID : {type : mongoose.Types.ObjectId, required: true},
     categoryID : {type : mongoose.Types.ObjectId, required: true},
-    subCategoryID : {type: mongoose.Types.ObjectId, required: true},
 },{timestamps : true, versionKey : false})
 
-export default ProductModel = mongoose.model('products', DataSchema);
+export const ProductModel = mongoose.model('products', DataSchema);

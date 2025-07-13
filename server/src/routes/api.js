@@ -5,6 +5,7 @@ import * as UserController from "../controllers/UserController.js"
 import {AuthMiddleware} from "../middlewares/AuthMiddleware.js";
 import * as CartController from "../controllers/CartController.js";
 import * as CategoryController from "../controllers/CategoryController.js";
+import * as ProductController from "../controllers/ProductController.js";
 
 
 
@@ -25,8 +26,11 @@ router.post('/UpdatePassword', AuthMiddleware, UserController.UpdatePassword)
 router.post('/UpdateProfileImage', AuthMiddleware, UserController.UpdateProfileImage)
 
 
-// products
+// categories
 router.post('/CreateCategory', AuthMiddleware, CategoryController.CreateCategory)
+
+// Products
+router.post('/CreateProduct', AuthMiddleware, ProductController.CreateProduct)
 
 
 

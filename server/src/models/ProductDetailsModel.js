@@ -14,4 +14,4 @@ const DataSchema = mongoose.Schema({
 
 },{timestamps : true, versionKey : false})
 
-export default ProductDetailsModel = mongoose.model('productDetails', DataSchema);
+export const ProductDetailsModel = mongoose.model('productDetails', DataSchema);
