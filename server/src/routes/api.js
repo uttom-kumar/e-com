@@ -19,6 +19,11 @@ router.post('/RecoverPassword',UserController.RecoverPassword)
 
 router.get('/UserReadProfile', AuthMiddleware, UserController.UserReadProfile)
 router.post('/UpdateProfile', AuthMiddleware, UserController.UpdateProfile)
+router.post('/UpdatePassword', AuthMiddleware, UserController.UpdatePassword)
+
+
+// add cart products
+router.post('/add-cart', AuthMiddleware)
 
 
 

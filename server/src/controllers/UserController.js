@@ -42,5 +42,9 @@ export const UpdateProfile = async (req, res) => {
     await UpdateProfileService(req, res)
 }
 
+export const UpdatePassword = async (req, res) => {
+    await UpdatePasswordService(req, res)
+}
+
 
 
