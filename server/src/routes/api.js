@@ -4,6 +4,7 @@ const router = express.Router()
 import * as UserController from "../controllers/UserController.js"
 import {AuthMiddleware} from "../middlewares/AuthMiddleware.js";
 import * as CartController from "../controllers/CartController.js";
+import * as CategoryController from "../controllers/CategoryController.js";
 
 
 
@@ -22,6 +23,11 @@ router.get('/UserReadProfile', AuthMiddleware, UserController.UserReadProfile)
 router.post('/UpdateProfile', AuthMiddleware, UserController.UpdateProfile)
 router.post('/UpdatePassword', AuthMiddleware, UserController.UpdatePassword)
 router.post('/UpdateProfileImage', AuthMiddleware, UserController.UpdateProfileImage)
+
+
+// products
+router.post('/CreateCategory', AuthMiddleware, CategoryController.CreateCategory)
+
 
 
 // add cart products
