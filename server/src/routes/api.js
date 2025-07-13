@@ -3,6 +3,7 @@ const router = express.Router()
 
 import * as UserController from "../controllers/UserController.js"
 import {AuthMiddleware} from "../middlewares/AuthMiddleware.js";
+import * as CartController from "../controllers/CartController.js";
 
 
 
@@ -24,7 +25,7 @@ router.post('/UpdateProfileImage', AuthMiddleware, UserController.UpdateProfileI
 
 
 // add cart products
-router.post('/add-cart', AuthMiddleware)
+router.post('/CreateCart', AuthMiddleware, CartController.CreateCart)
 
 
 
