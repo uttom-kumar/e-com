@@ -62,7 +62,7 @@ export const UpdateProductService = async (req, res) => {
         }
 
         await ProductModel.updateOne(
-            {userID: userID},
+            {_id : reqBody.productID, userID: userID},
             {
                 $set:reqBody,
             }

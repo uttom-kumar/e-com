@@ -9,7 +9,7 @@ const DataSchema = mongoose.Schema({
     color : {type : String, required : true},
     size : {type : String, required : true},
 
-
+    userID : {type : mongoose.Types.ObjectId, required : true},
     productID: {type : mongoose.Schema.Types.ObjectId,  required : true}
 
 },{timestamps : true, versionKey : false})

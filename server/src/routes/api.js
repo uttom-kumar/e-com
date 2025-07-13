@@ -31,6 +31,7 @@ router.post('/CreateCategory', AuthMiddleware, CategoryController.CreateCategory
 
 // Products
 router.post('/CreateProduct', AuthMiddleware, ProductController.CreateProduct)
+router.post('/UpdateProduct', AuthMiddleware, ProductController.UpdateProduct)
 
 
 
