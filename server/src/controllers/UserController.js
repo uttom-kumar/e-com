@@ -46,5 +46,8 @@ export const UpdatePassword = async (req, res) => {
     await UpdatePasswordService(req, res)
 }
 
+export const UpdateProfileImage = async (req, res) => {
+    await UpdateProfileImageService(req, res)
+}
 
 
