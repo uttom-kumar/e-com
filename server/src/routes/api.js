@@ -24,17 +24,16 @@ router.post('/RecoverPassword',UserController.RecoverPassword)
 router.get('/UserReadProfile', AuthMiddleware,  UserController.UserReadProfile)
 router.post('/UpdateProfile', AuthMiddleware, UserController.UpdateProfile)
 router.post('/UpdatePassword', AuthMiddleware, UserController.UpdatePassword)
-router.post('/UpdateProfileImage', AuthMiddleware, UserController.UpdateProfileImage)
 
 
 // categories
-router.post('/CreateCategory', AuthMiddleware, RoleMiddleware['admin'], CategoryController.CreateCategory)
+router.post('/CreateCategory', AuthMiddleware, RoleMiddleware(['admin']), CategoryController.CreateCategory)
 
 // Products
-router.post('/CreateProduct', AuthMiddleware, RoleMiddleware['admin'], ProductController.CreateProduct)
-router.post('/UpdateProduct', AuthMiddleware, RoleMiddleware['admin'], ProductController.UpdateProduct)
-router.post('/CreateProductDetail', AuthMiddleware, RoleMiddleware['admin'], ProductController.CreateProductDetail)
-router.post('/UpdateProductDetail', AuthMiddleware, RoleMiddleware['admin'], ProductController.UpdateProductDetail)
+router.post('/CreateProduct', AuthMiddleware, RoleMiddleware(['admin']), ProductController.CreateProduct)
+router.post('/UpdateProduct', AuthMiddleware, RoleMiddleware(['admin']), ProductController.UpdateProduct)
+router.post('/CreateProductDetail', AuthMiddleware, RoleMiddleware(['admin']), ProductController.CreateProductDetail)
+router.post('/UpdateProductDetail', AuthMiddleware, RoleMiddleware(['admin']), ProductController.UpdateProductDetail)
 
 
 

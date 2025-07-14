@@ -3,7 +3,7 @@ import {
     RecoverPasswordService,
     RegisterService,
     SendOTPService,
-    UpdatePasswordService, UpdateProfileImageService,
+    UpdatePasswordService,
     UpdateProfileService,
     UserReadProfileService,
     VerifyOTPService,
@@ -45,9 +45,3 @@ export const UpdateProfile = async (req, res) => {
 export const UpdatePassword = async (req, res) => {
     await UpdatePasswordService(req, res)
 }
-
-export const UpdateProfileImage = async (req, res) => {
-    await UpdateProfileImageService(req, res)
-}
-
-

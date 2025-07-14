@@ -161,20 +161,78 @@ export const CreateProductDetailService = async (req, res) => {
 export const UpdateProductDetailsService = async (req, res) => {
     try {
         const userID = req.headers.user_id;
-
         const reqBody = req.body;
+
+        // ✅ Step 1: Validate Admin
         const user = await UserModel.findById(userID);
         if (!user) {
             return res.status(404).json({ status: "failed", message: "User not found" });
         }
+        if (user.role !== "admin") {
+            return res.status(403).json({ status: "failed", message: "Only Admins can update product details" });
+        }
 
+        // ✅ Step 2: Find existing product details
+        const productDetail = await ProductDetailsModel.findOne({
+            productID: reqBody.productID,
+            userID: userID
+        });
 
+        if (!productDetail) {
+            return res.status(404).json({ status: "failed", message: "Product details not found" });
+        }
+
+        // ✅ Step 3: Handle images
+        const rawFiles = req.files?.images;
+        const fileArray = Array.isArray(rawFiles) ? rawFiles : rawFiles ? [rawFiles] : [];
+
+        // Initialize updated images array
+        const updatedImages = [...productDetail.images];
+
+        for (let i = 0; i < fileArray.length; i++) {
+            const file = fileArray[i];
+            if (file && file.mimetype?.startsWith("image/")) {
+                // Upload new image
+                const result = await new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { folder: "products" },
+                        (error, result) => {
+                            if (error) reject(error);
+                            else resolve(result);
+                        }
+                    );
+                    stream.end(file.data);
+                });
+
+                // Delete old image from Cloudinary
+                const oldImageURL = updatedImages[i];
+                if (oldImageURL) {
+                    const publicId = oldImageURL.split("/").slice(-1)[0].split(".")[0];
+                    await cloudinary.uploader.destroy(`products/${publicId}`);
+                }
+
+                // Replace the image at that index
+                updatedImages[i] = result.secure_url;
+            }
+        }
+
+        // ✅ Step 4: Update product detail
+        productDetail.images = updatedImages;
+        productDetail.color = reqBody.color || productDetail.color;
+        productDetail.size = reqBody.size || productDetail.size;
+        await productDetail.save();
+
+        return res.status(200).json({
+            status: "success",
+            message: "Product details updated successfully",
+        });
 
     } catch (err) {
         return res.status(500).json({
             status: "failed",
-            message: "something went wrong",
+            message: "Something went wrong",
             error: err.toString()
-        })
+        });
     }
-}
+};
+
