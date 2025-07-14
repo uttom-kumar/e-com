@@ -35,7 +35,8 @@ router.post('/UpdateProduct', AuthMiddleware, RoleMiddleware(['admin']), Product
 router.post('/CreateProductDetail', AuthMiddleware, RoleMiddleware(['admin']), ProductController.CreateProductDetail)
 router.post('/UpdateProductDetail', AuthMiddleware, RoleMiddleware(['admin']), ProductController.UpdateProductDetail)
 
-router.get('/ReadProductDetail', ProductController.ReadProductDetail)
+router.get('/ReadProduct', ProductController.ReadProduct)
+router.get('/ProductDetail/:id', ProductController.ProductDetail)
 
 
 

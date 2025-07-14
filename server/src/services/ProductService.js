@@ -1,7 +1,11 @@
+import mongoose from "mongoose";
+const ObjectId = mongoose.Types.ObjectId;
+
 import {UserModel} from "../models/UserModel.js";
 import {ProductModel} from "../models/ProductModel.js";
 import {ProductDetailsModel} from "../models/ProductDetailsModel.js";
 import cloudinary from "../config/cloudinary.js";
+
 
 
 export const CreateProductService = async (req, res) => {
@@ -96,6 +100,14 @@ export const CreateProductDetailService = async (req, res) => {
         }
         if (user.role !== "admin") {
             return res.status(403).json({ status: "failed", message: "Only Admins can create product details" });
+        }
+
+        const exitProduct = await ProductDetailsModel.findOne({productID : reqBody.productID});
+        if(exitProduct){
+            return res.status(400).json({
+                status: "failed",
+                message : 'Product Details already exists'
+            })
         }
 
         // ✅ Step 2: Validate Images
@@ -284,6 +296,88 @@ export const ReadProductDetailService = async (req, res) => {
         }
 
         const data = await ProductModel.aggregate([
+            JoinWithCategoryStage,
+            JoinWithProductDetailStage,
+            JoinWithReviewStage,
+            UnwindCategoryStage,
+            UnwindProductDetailsStage,
+            UnwindReviewStage,
+
+            projectionStage
+        ])
+
+        return res.status(200).json({
+            status: "success",
+            message: "Product details created successfully",
+            data: data
+        })
+
+    }
+    catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong",
+            error: err.toString()
+        })
+    }
+}
+
+export const ProductDetailService = async (req, res) => {
+    try {
+        const productID = new ObjectId(req.params.id);
+
+        const MatchStage = {
+            $match : {_id: productID}
+        }
+
+        const JoinWithCategoryStage = {
+            $lookup : {
+                from: "categories",
+                localField: "categoryID",
+                foreignField: "_id",
+                as: "category"
+            }
+        }
+
+        const JoinWithProductDetailStage = {
+            $lookup : {
+                from: 'productdetails',
+                localField: '_id',
+                foreignField: 'productID',
+                as: 'detail'
+            }
+        }
+
+        const JoinWithReviewStage = {
+            $lookup : {
+                from: 'reviews',
+                localField: '_id',
+                foreignField: 'productID',
+                as: 'review'
+            }
+        }
+
+        const UnwindCategoryStage = {
+            $unwind : { path: "$category", preserveNullAndEmptyArrays: true }
+        }
+        const UnwindProductDetailsStage = {
+            $unwind : { path: "$detail", preserveNullAndEmptyArrays: true }
+        }
+        const UnwindReviewStage = {
+            $unwind : { path: "$review", preserveNullAndEmptyArrays: true }
+        }
+
+        const projectionStage = {
+            $project : {
+                'category.createdAt' : 0,
+                'category.updatedAt' : 0,
+                'detail.createdAt' : 0,
+                'detail.updatedAt' : 0,
+            }
+        }
+
+        const data = await ProductModel.aggregate([
+            MatchStage,
             JoinWithCategoryStage,
             JoinWithProductDetailStage,
             JoinWithReviewStage,

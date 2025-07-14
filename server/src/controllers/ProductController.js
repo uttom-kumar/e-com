@@ -1,6 +1,6 @@
 import {
     CreateProductDetailService,
-    CreateProductService, ReadProductDetailService,
+    CreateProductService, ProductDetailService, ReadProductDetailService,
     UpdateProductDetailsService,
     UpdateProductService
 } from "../services/ProductService.js";
@@ -24,6 +24,10 @@ export const UpdateProductDetail = async (req, res) => {
     await UpdateProductDetailsService(req, res)
 }
 
-export const ReadProductDetail = async (req, res) => {
+export const ReadProduct = async (req, res) => {
     await ReadProductDetailService(req, res)
+}
+
+export const ProductDetail = async (req, res) => {
+    await ProductDetailService(req, res)
 }
