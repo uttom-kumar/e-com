@@ -21,7 +21,7 @@ export const AuthMiddleware = (req, res, next) => {
         let role =  decoded['role']
         req.headers.email = email
         req.headers.user_id = user_id
-        req.headers.role = role
+        req.headers.role = role 
         next()
     }
 }

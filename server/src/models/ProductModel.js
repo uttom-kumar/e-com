@@ -8,6 +8,7 @@ const DataSchema = mongoose.Schema({
     discountPrice : {type: String, required: true},
     productCode : {type: String, required: true, unique:true},
     remark : {type: String, default: ''},
+    stock : {type: String, default: '0'},
 
     userID : {type : mongoose.Types.ObjectId, required: true},
     categoryID : {type : mongoose.Types.ObjectId, required: true},

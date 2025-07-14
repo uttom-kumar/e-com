@@ -6,6 +6,7 @@ import {AuthMiddleware} from "../middlewares/AuthMiddleware.js";
 import * as CartController from "../controllers/CartController.js";
 import * as CategoryController from "../controllers/CategoryController.js";
 import * as ProductController from "../controllers/ProductController.js";
+import {RoleMiddleware} from "../middlewares/RoleMiddleware.js";
 
 
 
@@ -20,18 +21,20 @@ router.post('/SendOTP',UserController.SendOTP)
 router.post('/VerifyOTP',UserController.VerifyOTP)
 router.post('/RecoverPassword',UserController.RecoverPassword)
 
-router.get('/UserReadProfile', AuthMiddleware, UserController.UserReadProfile)
+router.get('/UserReadProfile', AuthMiddleware,  UserController.UserReadProfile)
 router.post('/UpdateProfile', AuthMiddleware, UserController.UpdateProfile)
 router.post('/UpdatePassword', AuthMiddleware, UserController.UpdatePassword)
 router.post('/UpdateProfileImage', AuthMiddleware, UserController.UpdateProfileImage)
 
 
 // categories
-router.post('/CreateCategory', AuthMiddleware, CategoryController.CreateCategory)
+router.post('/CreateCategory', AuthMiddleware, RoleMiddleware['admin'], CategoryController.CreateCategory)
 
 // Products
-router.post('/CreateProduct', AuthMiddleware, ProductController.CreateProduct)
-router.post('/UpdateProduct', AuthMiddleware, ProductController.UpdateProduct)
+router.post('/CreateProduct', AuthMiddleware, RoleMiddleware['admin'], ProductController.CreateProduct)
+router.post('/UpdateProduct', AuthMiddleware, RoleMiddleware['admin'], ProductController.UpdateProduct)
+router.post('/CreateProductDetail', AuthMiddleware, RoleMiddleware['admin'], ProductController.CreateProductDetail)
+router.post('/UpdateProductDetail', AuthMiddleware, RoleMiddleware['admin'], ProductController.UpdateProductDetail)
 
 
 
