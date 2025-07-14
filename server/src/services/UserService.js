@@ -400,7 +400,6 @@ export const UpdateProfileService = async (req, res) => {
     }
 };
 
-
 export const UpdatePasswordService = async (req, res) => {
     try{
         const userID = req.headers['user_id'];
