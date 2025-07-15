@@ -102,8 +102,18 @@ export const CreateProductDetailService = async (req, res) => {
             return res.status(403).json({ status: "failed", message: "Only Admins can create product details" });
         }
 
-        const exitProduct = await ProductDetailsModel.findOne({productID : reqBody.productID});
-        if(exitProduct){
+        // checked products
+        const exitProduct = await ProductModel.findOne({_id : reqBody.productID});
+        if(!exitProduct){
+            return res.status(400).json({
+                status: "failed",
+                message : 'Product not found'
+            })
+        }
+
+
+        const exitProductDetails = await ProductDetailsModel.findOne({productID : reqBody.productID});
+        if(exitProductDetails){
             return res.status(400).json({
                 status: "failed",
                 message : 'Product Details already exists'
