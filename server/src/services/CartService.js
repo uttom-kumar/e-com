@@ -19,7 +19,7 @@ export const CreateCartService = async (req, res) => {
         }
 
         if(user?.role !== 'user') {
-            return res.status(403).json({
+            return res.status(400).json({
                 status: 'failed',
                 message: 'Only users can add to cart',
             })

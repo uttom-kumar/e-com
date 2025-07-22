@@ -13,7 +13,7 @@ const TShirtCollection = () => {
 
     return (
         <div>
-            <div className={'bg-white p-5 rounded'}>
+            <div>
                 <div className={'flex items-center justify-between  mb-5  '}>
                     <h2 className="text-xl font-semibold capitalize">T-Shirt Collection</h2>
                     <button className={'cursor-pointer flex items-center gap-2'}>
@@ -21,7 +21,7 @@ const TShirtCollection = () => {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-5">
                     {categoryProducts.slice(0,6).map((product, index) => (
                         <div key={index}>
                             <CommonProductCard  product={product} />

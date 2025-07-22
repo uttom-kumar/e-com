@@ -5,6 +5,7 @@ import {UserModel} from "../models/UserModel.js";
 import {ProductModel} from "../models/ProductModel.js";
 import {ProductDetailsModel} from "../models/ProductDetailsModel.js";
 import cloudinary from "../config/cloudinary.js";
+import {CategoryModel} from "../models/CategoryModel.js";
 
 
 
@@ -15,6 +16,21 @@ export const CreateProductService = async (req, res) => {
         reqBody.userID = userID;
         reqBody.productCode = Math.floor(100000 + Math.random() * 900000).toString()
 
+        if(reqBody.categoryID === undefined){
+            return res.status(400).json({
+                status: "failed",
+                message : 'Category is required'
+            })
+        }
+
+        const category = await CategoryModel.findOne({_id: reqBody.categoryID})
+
+        if(!category) {
+            return res.status(400).json({
+                status: "failed",
+                message : 'Category not found'
+            })
+        }
 
         const user = await UserModel.findOne({_id : userID});
 
@@ -32,11 +48,14 @@ export const CreateProductService = async (req, res) => {
             })
         }
 
-        await ProductModel.create(reqBody)
+
+
+        const data = await ProductModel.create(reqBody)
 
         return res.status(201).json({
             status: "success",
-            message : 'Product created successfully'
+            message : 'Product created successfully',
+            data : data
         })
 
     }catch(err){
@@ -367,15 +386,19 @@ export const ProductDetailService = async (req, res) => {
             }
         }
 
-        const UnwindCategoryStage = {
-            $unwind : { path: "$category", preserveNullAndEmptyArrays: true }
+        const JoinWithReviewUserStage = {
+            $lookup : {
+                from: 'users',
+                localField: 'review.userID',
+                foreignField: '_id',
+                as: 'review.user'
+            }
         }
-        const UnwindProductDetailsStage = {
-            $unwind : { path: "$detail", preserveNullAndEmptyArrays: true }
-        }
-        const UnwindReviewStage = {
-            $unwind : { path: "$review", preserveNullAndEmptyArrays: true }
-        }
+
+        const UnwindCategoryStage = { $unwind : { path: "$category", preserveNullAndEmptyArrays: true } }
+        const UnwindProductDetailsStage = { $unwind : { path: "$detail", preserveNullAndEmptyArrays: true } }
+        const UnwindReviewStage = { $unwind : { path: "$review", preserveNullAndEmptyArrays: true } }
+        const UnwindReviewUserStage = { $unwind : { path: "$review.user", preserveNullAndEmptyArrays: true } }
 
         const projectionStage = {
             $project : {
@@ -383,6 +406,14 @@ export const ProductDetailService = async (req, res) => {
                 'category.updatedAt' : 0,
                 'detail.createdAt' : 0,
                 'detail.updatedAt' : 0,
+                'review.createdAt' : 0,
+                'review.updatedAt' : 0,
+                'review.user.createdAt' : 0,
+                'review.user.updatedAt' : 0,
+                'review.user.role' : 0,
+                'review.user.email' : 0,
+                'review.user.phone' : 0,
+                'review.user.address' : 0,
             }
         }
 
@@ -394,6 +425,8 @@ export const ProductDetailService = async (req, res) => {
             UnwindCategoryStage,
             UnwindProductDetailsStage,
             UnwindReviewStage,
+            JoinWithReviewUserStage,
+            UnwindReviewUserStage,
 
             projectionStage
         ])

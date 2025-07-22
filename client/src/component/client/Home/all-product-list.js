@@ -22,7 +22,6 @@ const AllProductList = () => {
             <PunjabiCollection />
             <BlazerCollection />
             <PantCollection />
-
         </div>
     );
 };

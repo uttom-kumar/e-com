@@ -23,13 +23,34 @@ body {
 }
 
 
-h2{
-  font-size:  30px !important;
+h2 {
+  font-size: 30px !important;
 }
 
-.title{
+.title {
   font-size: 14px !important;
 }
+
+/* Tablet (768px and below) */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 24px !important;
+  }
+  .title {
+    font-size: 12px !important;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  h2 {
+    font-size: 20px !important;
+  }
+  .title {
+    font-size: 10px !important;
+  }
+}
+
 
 
 .image-gallery-image {

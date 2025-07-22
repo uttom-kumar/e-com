@@ -10,6 +10,7 @@ import NavSearchButton from "@/component/Nav/Nav-Search-Button";
 import {IoBagOutline, IoHomeOutline} from "react-icons/io5";
 import {GrDeliver} from "react-icons/gr";
 import {GiSelfLove} from "react-icons/gi";
+import MobileNav from "@/component/Nav/MobileNav";
 
 const AppNavbar = () => {
     const pathname = usePathname();
@@ -67,11 +68,11 @@ const AppNavbar = () => {
 
 
                    {/* Desktop Menu */}
-                   <div className="flex items-center gap-5 md:gap-10">
+                   <div className=" flex items-center gap-5 md:gap-10">
                        {items.map((item, index) => {
                            const isActive = pathname === item.path;
                            return (
-                               <Link key={index} href={item.path}>
+                               <Link className={'hidden sm:block'} key={index} href={item.path}>
                                    <div
                                        className={`group relative flex items-center gap-2 transition cursor-pointer ${isActive ? 'text-blue-600 font-semibold' : 'text-gray-700 hover:text-blue-600'}`}
                                    >
