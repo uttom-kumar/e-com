@@ -42,6 +42,8 @@ router.get('/ProductDetail/:id', ProductController.ProductDetail)
 
 // add cart products
 router.post('/CreateCart', AuthMiddleware, RoleMiddleware(['user']), CartController.CreateCart)
+router.post('/DeleteCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.DeleteCart)
+router.post('/UpdateCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.UpdateCart)
 
 
 

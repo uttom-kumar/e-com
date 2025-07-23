@@ -50,3 +50,40 @@ export const CreateCartService = async (req, res) => {
         })
     }
 }
+
+export const DeleteCartService = async (req, res) => {
+    try{
+        const cartID = req.params.id;
+        const userID = req.headers.user_id;
+        const user = await UserModel.findOne({_id : userID})
+
+        if(!user) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'User not found',
+            })
+        }
+
+        const Cart = await CartModel.findOne({_id : cartID, userID : userID})
+        if(!Cart) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Cart not found',
+            })
+        }
+
+        await Cart.deleteOne({_id : cartID, userID : userID})
+        return res.status(200).json({
+            status: 'success',
+            message: 'Cart deleted successfully',
+        })
+    }
+    catch(err){
+        res.status(500).send({
+            status: 'failed',
+            message: "Something went wrong",
+            error : err.toString()
+        })
+    }
+}
+
