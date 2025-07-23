@@ -4,9 +4,10 @@ import {CartModel} from "../models/CartModel.js";
 
 export const CreateCartService = async (req, res) => {
     try{
+        const productID = req.params.id;
         const userID = req.headers.user_id
         const reqBody = req.body;
-        const {productID, color, qty, size} = reqBody;
+        const {color, qty, size} = reqBody;
 
 
         const user = await UserModel.findOne({_id : userID})
@@ -26,7 +27,6 @@ export const CreateCartService = async (req, res) => {
         }
 
         const data = await CartModel.create(
-            {userID : userID},
             {
                 userID: userID,
                 productID : productID,

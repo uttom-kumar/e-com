@@ -130,6 +130,22 @@ export const LoginService = async (req, res) => {
     }
 };
 
+export const LogoutService = async (req, res) => {
+    try {
+        res.clearCookie("token");
+        return res.status(200).json({
+            status: "success",
+            message: "Logout Successfully"
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong!",
+            error: err.toString()
+        });
+    }
+}
+
 export const SendOTPService = async (req, res) => {
     try {
         const { email } = req.body;

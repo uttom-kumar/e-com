@@ -1,5 +1,5 @@
 import {
-    LoginService,
+    LoginService, LogoutService,
     RecoverPasswordService,
     RegisterService,
     SendOTPService,
@@ -16,6 +16,10 @@ export const Register = async (req, res) => {
 
 export const Login = async (req, res) => {
     await LoginService(req, res)
+}
+
+export const Logout = async (req, res) => {
+    await LogoutService(req, res)
 }
 
 export const  SendOTP = async (req, res) => {

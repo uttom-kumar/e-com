@@ -15,6 +15,7 @@ import {RoleMiddleware} from "../middlewares/RoleMiddleware.js";
 // user API
 router.post('/Register',UserController.Register)
 router.post('/Login',UserController.Login)
+router.get('/Logout',UserController.Logout)
 
 
 router.post('/SendOTP',UserController.SendOTP)
@@ -41,7 +42,7 @@ router.get('/ProductDetail/:id', ProductController.ProductDetail)
 
 
 // add cart products
-router.post('/CreateCart', AuthMiddleware, RoleMiddleware(['user']), CartController.CreateCart)
+router.post('/CreateCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.CreateCart)
 router.post('/DeleteCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.DeleteCart)
 router.post('/UpdateCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.UpdateCart)
 
