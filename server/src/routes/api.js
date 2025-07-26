@@ -9,10 +9,6 @@ import * as CategoryController from "../controllers/CategoryController.js";
 import * as ProductController from "../controllers/ProductController.js";
 import * as WishController from "../controllers/WishController.js";
 
-
-
-
-
 // user API
 router.post('/Register',UserController.Register)
 router.post('/Login',UserController.Login)
@@ -49,7 +45,7 @@ router.post('/UpdateCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartCon
 router.get('/ReadCart', AuthMiddleware, RoleMiddleware(['user']), CartController.ReadCart)
 
 // add Wishes products
-router.post('/CreateWish/:id', WishController.CreateWish)
+router.post('/CreateWish/:id',AuthMiddleware, RoleMiddleware(['user']), WishController.CreateWish)
 
 
 

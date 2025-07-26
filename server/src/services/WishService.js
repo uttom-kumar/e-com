@@ -4,10 +4,11 @@ import {WishModel} from "../models/WishModel.js";
 
 export const CreateWishService = async (req, res) => {
     try{
-        const user_id = req.headers.user_id
+        const userID = req.headers.user_id
+        console.log(userID)
         const productID = req.params.id
 
-        const user = await UserModel.findOne({_id : user_id})
+        const user = await UserModel.findOne({_id : userID})
         if(!user) {
             return res.status(400).json({
                 status : 'failed',
@@ -30,7 +31,7 @@ export const CreateWishService = async (req, res) => {
         }
 
         const data = await WishModel.create({
-            userID : user_id,
+            userID : userID,
             productID : productID,
         })
 
