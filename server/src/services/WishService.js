@@ -120,3 +120,36 @@ export const ReadWishListService = async (req, res) => {
         })
     }
 }
+
+export const DeleteWishListService = async (req, res) => {
+    try{
+        const userID = req.headers.user_id
+        const productID = req.params.id
+        const user = await UserModel.findById(userID)
+        if(!user) {
+            return res.status(400).json({
+                status : 'failed',
+                message : 'User not found',
+            })
+        }
+        const data = await WishModel.deleteOne({userID : userID, productID : productID})
+        if(data.deletedCount===0) {
+            return res.status(400).json({
+                status : 'failed',
+                message : 'Wishlist item not found or already deleted',
+            })
+        }
+        return res.status(200).json({
+                status : 'success',
+                message : 'Wish deleted successfully',
+                data : data,
+        })
+    }
+    catch(err){
+        return res.status(500).json({
+            status : 'failed',
+            message : 'Internal Server Error',
+            error : err.toString()
+        })
+    }
+}

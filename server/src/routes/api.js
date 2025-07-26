@@ -47,7 +47,7 @@ router.get('/ReadCart', AuthMiddleware, RoleMiddleware(['user']), CartController
 // add Wishes products
 router.post('/CreateWish/:id',AuthMiddleware, RoleMiddleware(['user']), WishController.CreateWish)
 router.get('/ReadWishList',AuthMiddleware, RoleMiddleware(['user']), WishController.ReadWishList)
-// router.get('/DeleteWishList/:id',AuthMiddleware, RoleMiddleware(['user']), WishController.DeleteWishList)
+router.get('/DeleteWishList/:id',AuthMiddleware, RoleMiddleware(['user']), WishController.DeleteWishList)
 
 
 
