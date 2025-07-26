@@ -22,12 +22,12 @@ const MobileNav = () => {
                 <button aria-label="Bag" className="text-gray-600 text-lg">
                     <IoBagOutline size={20}/>
                 </button>
-                <button
+                <Link href={'/'}
                     aria-label="Home"
                     className="absolute -top-5 left-1/2 -translate-x-1/2 bg-blue-600 w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl shadow-lg"
                 >
                     <IoHomeOutline size={20} />
-                </button>
+                </Link>
                 <button aria-label="Favorites" className="text-gray-600 text-lg">
                     <GiSelfLove size={20}/>
                 </button>

@@ -28,29 +28,36 @@ export const CreateCartService = async (req, res) => {
             })
         }
 
-        const exitCart = await CartModel.findOne({productID : productID, userID : userID})
-        if(exitCart) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Product already exists in cart',
-            })
+        // Check if the product is already in the cart
+        const existingCartItem = await CartModel.findOne({ productID: productID, userID: userID });
+
+        if (existingCartItem) {
+            existingCartItem.qty += qty;
+            existingCartItem.color = color;
+            existingCartItem.size = size;
+            await existingCartItem.save();
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Cart quantity updated successfully',
+                data: existingCartItem,
+            });
         }
 
-        const data = await CartModel.create(
-            {
-                userID: userID,
-                productID : productID,
-                color : color,
-                qty : qty,
-                size : size,
-            }
-        )
+        // If not in cart, create new item
+        const newCartItem = await CartModel.create({
+            userID,
+            productID,
+            color,
+            qty,
+            size,
+        });
 
         return res.status(201).json({
             status: 'success',
             message: 'Cart created successfully',
-            data :  data,
-        })
+            data: newCartItem,
+        });
 
     }catch(err){
         res.status(500).send({

@@ -1,27 +1,21 @@
 'use client';
 import React from 'react';
 import TShirtCollection from "@/component/client/Home/T-Shirt-Collection";
-import ProductNav from "@/component/Nav/product-nav";
-import ShirtCollection from "@/component/client/Home/Shirt-Collection";
-import PantCollection from "@/component/client/Home/Pant-Collection";
-import PunjabiCollection from "@/component/client/Home/Punjabi-Collection";
-import BlazerCollection from "@/component/client/Home/Blazer-Collection";
+import BannerSection from "@/component/client/Home/BannerSection";
+import Features from "@/component/client/Home/Features";
+import CategorySection from "@/component/client/Home/CategorySection";
+import ProductLists from "@/component/client/Home/ProductLists";
 
 
 const AllProductList = () => {
 
     return (
         <div className="container mx-auto space-y-8 ">
-            {/*---- product navbar ----*/}
-            <div>
-                <ProductNav />
-            </div>
-
+            <BannerSection />
+            <Features />
+            <CategorySection />
             <TShirtCollection />
-            <ShirtCollection />
-            <PunjabiCollection />
-            <BlazerCollection />
-            <PantCollection />
+            <ProductLists />
         </div>
     );
 };
