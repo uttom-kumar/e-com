@@ -359,6 +359,14 @@ export const ProductDetailService = async (req, res) => {
             $match : {_id: productID}
         }
 
+        const exitProduct = await ProductModel.findOne({_id : productID});
+        if(!exitProduct){
+            return res.status(400).json({
+                status: "failed",
+                message : 'Product not found'
+            })
+        }
+
         const JoinWithCategoryStage = {
             $lookup : {
                 from: "categories",

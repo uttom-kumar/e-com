@@ -3,10 +3,11 @@ const router = express.Router()
 
 import * as UserController from "../controllers/UserController.js"
 import {AuthMiddleware} from "../middlewares/AuthMiddleware.js";
+import {RoleMiddleware} from "../middlewares/RoleMiddleware.js";
 import * as CartController from "../controllers/CartController.js";
 import * as CategoryController from "../controllers/CategoryController.js";
 import * as ProductController from "../controllers/ProductController.js";
-import {RoleMiddleware} from "../middlewares/RoleMiddleware.js";
+import * as WishController from "../controllers/WishController.js";
 
 
 
@@ -47,7 +48,8 @@ router.post('/DeleteCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartCon
 router.post('/UpdateCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.UpdateCart)
 router.get('/ReadCart', AuthMiddleware, RoleMiddleware(['user']), CartController.ReadCart)
 
-
+// add Wishes products
+router.post('/CreateWish/:id', WishController.CreateWish)
 
 
 
