@@ -2,33 +2,34 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import {FaShoppingCart } from 'react-icons/fa';
+import {usePathname, useRouter} from 'next/navigation';
 import { AiOutlineProduct} from 'react-icons/ai';
 import {CiUser } from "react-icons/ci";
-import NavSearchButton from "@/component/Nav/Nav-Search-Button";
 import {IoBagOutline, IoHomeOutline} from "react-icons/io5";
 import {GrDeliver} from "react-icons/gr";
 import {GiSelfLove} from "react-icons/gi";
-import MobileNav from "@/component/Nav/MobileNav";
+import {isUserLoggedIn} from "@/component/Utility/Helper";
 
 const AppNavbar = () => {
     const pathname = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
-    const [myToken, setMyToken] = useState(null);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-
     const profileMenuRef = useRef(null);
+
+    const token = isUserLoggedIn();
 
 
     const toggleProfileMenu = () => setProfileMenuOpen(prev => !prev);
     const toggleProfileClose = ()  => setProfileMenuOpen(!profileMenuOpen);
 
 
+    const router = useRouter();
+
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        setMyToken(token);
-    }, []);
+        if (!token) {
+            router.push("/login");
+        }
+    }, [token, router]);
     
 
     const items = [
@@ -77,13 +78,16 @@ const AppNavbar = () => {
                                        className={`group relative flex items-center gap-2 transition cursor-pointer ${isActive ? 'text-blue-600 font-semibold' : 'text-gray-700 hover:text-blue-600'}`}
                                    >
                                        <span>{item.icon}</span>
+                                       <span className={"hidden lg:block"}>{item.text}</span>
 
                                        {/* Tooltip */}
-                                       <span
-                                           className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block whitespace-nowrap bg-black text-white text-xs rounded px-2 py-1 z-10 shadow-lg"
-                                       >
-                                      {item.text}
-                                    </span>
+                                       <div className="block xl:hidden">
+                                           <span
+                                               className="lg:hidden absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block whitespace-nowrap bg-black text-white text-xs rounded px-2 py-1 z-10 shadow-lg"
+                                           >
+                                                {item.text}
+                                            </span>
+                                       </div>
 
 
                                        {/* Badge if count > 0 */}
@@ -99,35 +103,39 @@ const AppNavbar = () => {
                        })}
                        <div>
                            <div className={'flex items-center gap-6'}>
-                               {
-                                   !myToken ? (
-                                       <>
-                                           <div className="relative inline-block" ref={profileMenuRef}>
-                                               <button
-                                                   onClick={toggleProfileMenu}
-                                                   className="cursor-pointer p-2 bg-gray-400 text-white rounded-full"
-                                               >
-                                                   <CiUser size={15} />
-                                               </button>
+                               <div className="relative inline-block" ref={profileMenuRef}>
+                                   <button
+                                       onClick={toggleProfileMenu}
+                                       className="cursor-pointer p-2 bg-gray-400 text-white rounded-full"
+                                   >
+                                       <CiUser size={15} />
+                                   </button>
 
-                                               {profileMenuOpen && (
-                                                   <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow">
-                                                       <ul className="text-sm text-gray-700">
-                                                           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                                               <Link className={'block'} onClick={toggleProfileClose} href={'/profile'}>Profile</Link>
-                                                           </li>
-                                                           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Orders</li>
-                                                           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Returns</li>
-                                                           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</li>
-                                                       </ul>
+                                   {profileMenuOpen && (
+                                       <>
+                                           {
+                                               token ? (
+                                                   <>
+                                                       <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow">
+                                                           <ul className="text-sm text-gray-700">
+                                                               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                                                   <Link className={'block'} onClick={toggleProfileClose} href={'/profile'}>Profile</Link>
+                                                               </li>
+                                                               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Orders</li>
+                                                               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Returns</li>
+                                                               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Logout</li>
+                                                           </ul>
+                                                       </div>
+                                                   </>
+                                               ) : (
+                                                   <div className={"absolute right-0 mt-2 w-48 bg-white border rounded shadow"}>
+                                                       <Link onClick={toggleProfileClose} className={"hover:text-blue-600 py-2 text-center block"} href={'/login'}>Login</Link>
                                                    </div>
-                                               )}
-                                           </div>
+                                               )
+                                           }
                                        </>
-                                   ) : (
-                                       <Link className={"hover:text-blue-600"} href={'/login'}>Login</Link>
-                                   )
-                               }
+                                   )}
+                               </div>
                            </div>
                        </div>
                    </div>

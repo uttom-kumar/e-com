@@ -13,10 +13,10 @@ const AppLayout = ({children}) => {
                 showSpinner={false}
                 zIndex={999999}
             />
-           <div className={'fixed top-0 left-0 right-0 bg-white z-[99999]'}>
+           <div className={'fixed top-0 left-0 right-0 bg-white z-[999]'}>
                <AppNavbar />
            </div>
-            <div className={'relative top-10 md:top-15  left-0 right-0 py-6 px-2 sm:px-6'}>
+            <div className={'relative top-10 md:top-15 left-0 right-0 pb-15 md:pb-0 py-6 px-2 sm:px-6'}>
                 {children}
             </div>
             <div className={"block sm:hidden fixed bottom-0 left-0 right-0 z-[99999]"}>

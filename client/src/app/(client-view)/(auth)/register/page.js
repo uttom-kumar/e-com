@@ -1,10 +1,11 @@
 "use client"
 import React from 'react';
+import RegisterComponent from "@/component/Auth/Register-Component";
 
 const Page = () => {
     return (
         <div>
-          Register page
+            <RegisterComponent />
         </div>
     );
 };
