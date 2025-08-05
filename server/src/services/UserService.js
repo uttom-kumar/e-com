@@ -108,9 +108,9 @@ export const LoginService = async (req, res) => {
         // 5. Set token in cookie
         const options = {
             maxAge: JWT_EXPIRE_TIME,
-            httpOnly: false,
+            httpOnly: true,
             sameSite: "None",
-            secure: true
+            secure: false
         };
         res.cookie("token", token, options);
 

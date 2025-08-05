@@ -9,14 +9,77 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { BsCalendar } from "react-icons/bs";
 import { IoMdTransgender } from "react-icons/io";
 import toast from "react-hot-toast";
+import { RegisterRequest } from "@/component/Request-Api/UserAuth";
+import {IsEmail, passwordValidation, ValidPhone} from "@/component/Utility/FromValidation";
+import {useRouter} from "next/navigation";
 
 const RegisterComponent = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [birthday, setBirthday] = useState("");
+    const [gender, setGender] = useState("");
+    const [password, setPassword] = useState("");
 
-    const submitFrom = (e) => {
+    const navigate = useRouter()
+
+    const onchangeValue = (e) => {
+        const { name, value } = e.target;
+        switch (name) {
+            case "name":
+                setName(value);
+                break;
+            case "email":
+                setEmail(value);
+                break;
+            case "phone":
+                setPhone(value);
+                break;
+            case "birthday":
+                setBirthday(value);
+                break;
+            case "gender":
+                setGender(value);
+                break;
+            case "password":
+                setPassword(value);
+                break;
+            default:
+                break;
+        }
+    };
+
+    const submitFrom = async (e) => {
         e.preventDefault();
-        toast.success('Register Success');
-    }
+        const reqbody = { name, email, phone, birthday, gender, password };
+        if (!name || !email || !phone || !birthday || !gender || !password) {
+            return toast.error("All fields are required!");
+        }
+        else if(!IsEmail(email)){
+            return toast.error("Enter valid email address!")
+        }
+        else if(!ValidPhone(phone)){
+            return toast.error("Enter valid phone number!")
+        }
+        else if(passwordValidation(password)){
+            return toast.error(passwordValidation(password));
+
+        }
+        else {
+            let res = await RegisterRequest(reqbody);
+            console.log(res)
+            if (res === true) {
+                setName("");
+                setEmail("");
+                setPhone("");
+                setBirthday("");
+                setGender("");
+                setPassword("");
+                navigate.push('/login')
+            }
+        }
+    };
 
     return (
         <div>
@@ -42,7 +105,9 @@ const RegisterComponent = () => {
                                 <FiUser size={15} className="mr-2" />
                                 <input
                                     className="bg-transparent w-full outline-none placeholder-gray-400"
-                                    id="name"
+                                    name="name"
+                                    value={name}
+                                    onChange={onchangeValue}
                                     placeholder="Full Name"
                                     type="text"
                                 />
@@ -55,7 +120,9 @@ const RegisterComponent = () => {
                                 <MdOutlineMail size={15} className="mr-2" />
                                 <input
                                     className="bg-transparent w-full outline-none placeholder-gray-400"
-                                    id="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={onchangeValue}
                                     placeholder="Email"
                                     type="email"
                                 />
@@ -68,7 +135,9 @@ const RegisterComponent = () => {
                                 <FaPhoneAlt size={15} className="mr-2" />
                                 <input
                                     className="bg-transparent w-full outline-none placeholder-gray-400"
-                                    id="phone"
+                                    name="phone"
+                                    value={phone}
+                                    onChange={onchangeValue}
                                     placeholder="Phone Number"
                                     type="tel"
                                 />
@@ -81,7 +150,9 @@ const RegisterComponent = () => {
                                 <BsCalendar size={15} className="mr-2" />
                                 <input
                                     className="bg-transparent w-full outline-none placeholder-gray-400"
-                                    id="birthday"
+                                    name="birthday"
+                                    value={birthday}
+                                    onChange={onchangeValue}
                                     placeholder="Birthday"
                                     type="date"
                                 />
@@ -94,7 +165,9 @@ const RegisterComponent = () => {
                                 <IoMdTransgender size={15} className="mr-2" />
                                 <select
                                     className="bg-transparent w-full outline-none text-gray-600"
-                                    id="gender"
+                                    name="gender"
+                                    value={gender}
+                                    onChange={onchangeValue}
                                 >
                                     <option value="">Select Gender</option>
                                     <option value="male">Male</option>
@@ -110,7 +183,9 @@ const RegisterComponent = () => {
                                 <FiLock size={15} className="mr-2" />
                                 <input
                                     className=" bg-transparent w-full outline-none placeholder-gray-400"
-                                    id="password"
+                                    name="password"
+                                    value={password}
+                                    onChange={onchangeValue}
                                     placeholder="Password"
                                     type={showPassword ? "text" : "password"}
                                 />

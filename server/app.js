@@ -26,9 +26,8 @@ app.use(mongoSanitize())
 app.use(helmet())
 
 app.use(cors({
-  origin: "*",
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true,
+    origin: "http://localhost:3000", // ✅ Exact frontend URL
+    credentials: true // ✅ Allow credentials (cookies)
 }));
 
 

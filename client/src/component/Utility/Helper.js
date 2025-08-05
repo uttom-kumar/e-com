@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 class Helper {
     Unauthorized(code){
         if(code===401){
@@ -9,12 +11,18 @@ class Helper {
     }
 
     isUserLoggedIn(){
-        return localStorage.getItem('token') !== null
+        return Cookies.get('token')
     }
+
+    BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+    axiosHeader = {headers: {"token": Cookies.get('token')}};
 }
 
 export const {
     Unauthorized,
-    isUserLoggedIn
+    isUserLoggedIn,
+    BaseUrl,
+    axiosHeader
 
 } = new Helper()

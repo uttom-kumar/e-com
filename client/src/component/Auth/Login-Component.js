@@ -5,9 +5,48 @@ import Link from "next/link";
 import { MdOutlineMail } from "react-icons/md";
 import { FiLock } from "react-icons/fi";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import toast from "react-hot-toast";
+import { LoginRequest } from "@/component/Request-Api/UserAuth";
+import { useRouter } from "next/navigation";
 
 const LoginComponent = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const router = useRouter();
+
+    // Handle input change
+    const onchangeValue = (e) => {
+        const { name, value } = e.target;
+        switch (name) {
+            case "email":
+                setEmail(value);
+                break;
+            case "password":
+                setPassword(value);
+                break;
+            default:
+                break;
+        }
+    };
+
+    // Handle form submit
+    const submitFrom = async (e) => {
+        e.preventDefault();
+        const reqbody = { email, password };
+
+        if (!email || !password) {
+            return toast.error("All fields are required!");
+        }
+
+        let res = await LoginRequest(reqbody);
+        console.log(res);
+        if (res === true) {
+            setEmail("");
+            setPassword("");
+            router.push('/profile');
+        }
+    };
 
     return (
         <div>
@@ -27,7 +66,8 @@ const LoginComponent = () => {
                         <br />
                         and teams together. For free
                     </p>
-                    <form className="w-full space-y-3">
+
+                    <form className="w-full space-y-3" onSubmit={submitFrom}>
                         {/* Email Field */}
                         <div>
                             <label className="sr-only" htmlFor="email">
@@ -38,8 +78,11 @@ const LoginComponent = () => {
                                 <input
                                     className="bg-transparent w-full outline-none placeholder-gray-400"
                                     id="email"
+                                    name="email"  // ✅ Added name for switch-case
                                     placeholder="Email"
                                     type="email"
+                                    value={email}
+                                    onChange={onchangeValue}
                                 />
                             </div>
                         </div>
@@ -54,8 +97,11 @@ const LoginComponent = () => {
                                 <input
                                     className="bg-transparent w-full outline-none placeholder-gray-400"
                                     id="password"
+                                    name="password"  // ✅ Added name for switch-case
                                     placeholder="Password"
                                     type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={onchangeValue}
                                 />
                                 <button
                                     type="button"
@@ -87,6 +133,7 @@ const LoginComponent = () => {
                             Get Started
                         </button>
                     </form>
+
                     <div className="dotted-line-text mt-3">
                         Or <Link href="/register">sign up</Link>
                     </div>

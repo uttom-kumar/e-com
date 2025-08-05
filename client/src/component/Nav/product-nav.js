@@ -6,7 +6,7 @@ const ProductNav = () => {
     return (
         <div className="mb-5  ">
             <div className="container mx-auto">
-                <div className="bg-white rounded px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="bg-white rounded px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-4">
 
                     {/* Left: Title and view toggle */}
                     <div className="flex items-center gap-4">
