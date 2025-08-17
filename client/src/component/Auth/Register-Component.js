@@ -12,6 +12,8 @@ import toast from "react-hot-toast";
 import { RegisterRequest } from "@/component/Request-Api/UserAuth";
 import {IsEmail, passwordValidation, ValidPhone} from "@/component/Utility/FromValidation";
 import {useRouter} from "next/navigation";
+import LoadingButton from "@/component/client/common/LoadingButton";
+import {useSelector} from "react-redux";
 
 const RegisterComponent = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -21,6 +23,7 @@ const RegisterComponent = () => {
     const [birthday, setBirthday] = useState("");
     const [gender, setGender] = useState("");
     const [password, setPassword] = useState("");
+    const isLoading = useSelector(state => state.loading.isLoading)
 
     const navigate = useRouter()
 
@@ -50,7 +53,7 @@ const RegisterComponent = () => {
         }
     };
 
-    const submitFrom = async (e) => {
+    const submitFromHandler = async (e) => {
         e.preventDefault();
         const reqbody = { name, email, phone, birthday, gender, password };
         if (!name || !email || !phone || !birthday || !gender || !password) {
@@ -98,7 +101,7 @@ const RegisterComponent = () => {
                         Join us to bring your words, data, and teams together.
                         It only takes a minute!
                     </p>
-                    <form className="w-full space-y-3" onSubmit={submitFrom}>
+                    <form className="w-full space-y-3" onSubmit={submitFromHandler}>
                         {/* Name */}
                         <div>
                             <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 text-gray-500 text-xs">
@@ -204,12 +207,13 @@ const RegisterComponent = () => {
                         </div>
 
                         {/* Submit Button */}
-                        <button
-                            className="cursor-pointer w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white rounded-lg py-2 mt-2 text-sm font-medium shadow-md hover:shadow-lg transition-shadow"
+                        <LoadingButton
                             type="submit"
-                        >
-                            Register
-                        </button>
+                            onClick={submitFromHandler}
+                            text="Register"
+                            isLoading={isLoading}
+                            disabled={false}
+                        />
                     </form>
                     <div className="dotted-line-text mt-3">
                         Already have an account? <Link href="/login">Sign in</Link>

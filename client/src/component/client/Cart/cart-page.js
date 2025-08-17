@@ -1,17 +1,23 @@
 'use client';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {AiOutlineDelete} from "react-icons/ai";
+import {useSelector} from "react-redux";
+import {DeleteCartRequest, ReadCartRequest} from "@/component/Request-Api/CartRequest";
+import Link from "next/link";
 
 const CartPage = () => {
-    const [quantity, setQuantity] = useState(1);
+    const CartList = useSelector((state) => state.cartList.cartList);
+    const totalQty = useSelector((state) => state.cartList.cartQuantity);
+    const totalPrice = useSelector((state) => state.cartList.TotalPrice);
 
-    const decrementQuantity = () => {
-        if (quantity > 1) setQuantity(quantity - 1);
-    };
 
-    const incrementQuantity = () => {
-        setQuantity(quantity + 1);
-    };
+    const DeleteCartHandler =async (id) => {
+        let res = await DeleteCartRequest(id)
+        if(res === true){
+            await ReadCartRequest()
+        }
+    }
+
 
     return (
         <div className="container mx-auto py-6">
@@ -32,62 +38,50 @@ const CartPage = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {Array.from(Array(3).keys()).map((_, i) => (
-                                <tr key={i} className=" hover:bg-gray-50">
-                                    {/* Image */}
-                                    <td className="p-3">
-                                        <img
-                                            src="https://via.placeholder.com/100"
-                                            alt="product"
-                                            className="w-16 h-16 object-cover rounded"
-                                        />
-                                    </td>
+                            {
+                                CartList.map((data, i) => {
+                                    return (
+                                        <tr key={i} className=" hover:bg-gray-50">
+                                            {/* Image */}
+                                            <td className="p-3">
+                                               <Link href={`/product-details/${data?.product?._id}`}>
+                                                   <img
+                                                       src={data?.productDetail?.images[0]}
+                                                       alt={data?.product?.title}
+                                                       className="w-16 h-16 object-cover rounded"
+                                                   />
+                                               </Link>
+                                            </td>
 
-                                    {/* Details */}
-                                    <td className="p-3">
-                                        <p className="font-semibold">MTB Bike Cassette Flywheel Tool</p>
-                                        <p className="text-gray-500 text-xs">No Brand, Color Family: Black</p>
-                                    </td>
+                                            {/* Details */}
+                                            <td className="p-3">
+                                                <Link href={`/product-details/${data?.product?._id}`}>
+                                                    <p className="font-semibold">{data?.product?.title}</p>
+                                                </Link>
+                                                <p className="text-gray-500 text-xs">Color Family: {data?.color}</p>
+                                            </td>
 
-                                    {/* Price */}
-                                    <td className="p-3 text-center">
-                                        <div className=" font-bold">৳ 125</div>
-                                    </td>
+                                            {/* Price */}
+                                            <td className="p-3 text-center">
+                                                {totalPrice}
+                                            </td>
 
-                                    {/* Quantity */}
-                                    <td className="p-3 text-center">
-                                        <div className="flex justify-center items-center gap-2">
-                                            <button
-                                                onClick={decrementQuantity}
-                                                disabled={quantity === 1}
-                                                className={`w-8 h-8 border rounded flex items-center justify-center font-bold transition ${
-                                                    quantity === 1
-                                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                                        : 'cursor-pointer bg-gray-100 hover:bg-gray-200'
-                                                }`}
-                                            >
-                                                −
-                                            </button>
-                                            <input
-                                                readOnly
-                                                value={quantity}
-                                                className="w-10 text-center rounded outline-none"
-                                            />
-                                            <button
-                                                onClick={incrementQuantity}
-                                                className="cursor-pointer w-8 h-8 border rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center font-bold transition"
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td className="p-3 text-center">
-                                        <button className={'cursor-pointer text-red-500'}>
-                                            <AiOutlineDelete size={20} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                                            {/* Quantity */}
+                                            <td className="p-3 text-center">
+                                                <div className="flex justify-center items-center gap-2">
+                                                    <p>{totalQty}</p>
+                                                </div>
+                                            </td>
+                                            <td className="p-3 text-center">
+                                                <button onClick={()=>DeleteCartHandler(data?._id)} className={'cursor-pointer' +
+                                                    ' text-red-500'}>
+                                                    <AiOutlineDelete size={20} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -98,8 +92,8 @@ const CartPage = () => {
                     <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
 
                     <div className="flex justify-between text-sm mb-2">
-                        <span>Subtotal (3 items)</span>
-                        <span>৳ 375</span>
+                        <span>Subtotal ({totalQty} items)</span>
+                        <span>৳ {totalPrice}</span>
                     </div>
 
                     <div className="flex justify-between text-sm mb-2">
@@ -111,7 +105,7 @@ const CartPage = () => {
 
                     <div className="flex justify-between text-base font-semibold mb-4">
                         <span>Total</span>
-                        <span>৳ 425</span>
+                        <span>৳ {totalPrice + 50}</span>
                     </div>
 
                     <button className="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 font-semibold transition">

@@ -9,6 +9,7 @@ const ObjectId = mongoose.Types.ObjectId;
 export const SaveWishService = async (req, res) => {
     try{
         const userID = req.headers.user_id
+        console.log(userID)
         const productID = req.params.id
 
         const user = await UserModel.findOne({_id : userID})
@@ -45,7 +46,7 @@ export const SaveWishService = async (req, res) => {
         )
 
 
-        return res.status(200).json({
+        return res.status(201).json({
             status : 'success',
             message : 'Wish created successfully',
             data : data,
@@ -86,7 +87,27 @@ export const ReadWishListService = async (req, res) => {
             }
         }
 
+        const JoinWithProductDetailStage = {
+            $lookup : {
+                from : 'productdetails',
+                localField : 'productID',
+                foreignField : 'productID',
+                as : 'productDetail'
+            }
+        }
+
+        // const JoinWithReviewStage = {
+        //     $lookup : {
+        //         from : 'reviews',
+        //         localField : 'productID',
+        //         foreignField : 'productID',
+        //         as : 'review'
+        //     }
+        // }
+
         const UnwindProductStage = {$unwind : {path : "$product", preserveNullAndEmptyArrays : true}}
+        const UnwindProductDetailStage = {$unwind : {path : "$productDetail", preserveNullAndEmptyArrays : true}}
+        // const UnwindReviewStage = {$unwind : {path : "$review", preserveNullAndEmptyArrays : true}}
         const ProjectionStage = {
             $project : {
                 'createdAt' : 0,
@@ -95,15 +116,26 @@ export const ReadWishListService = async (req, res) => {
                 'product.stock' : 0,
                 'product.createdAt' : 0,
                 'product.updatedAt' : 0,
+                'productDetail.color':0,
+                'productDetail.size':0,
+                'productDetail.userID':0,
+                'productDetail._id':0,
+                'productDetail.createdAt':0,
+                'productDetail.updatedAt':0,
+                'productDetail.productID':0,
             }
         }
 
         const data = await WishModel.aggregate([
             MatchStage,
             JoinWithProductStage,
+            JoinWithProductDetailStage,
+            // JoinWithReviewStage,
 
             UnwindProductStage,
-            ProjectionStage
+            UnwindProductDetailStage,
+            // UnwindReviewStage,
+            ProjectionStage,
         ])
 
         return res.status(200).json({

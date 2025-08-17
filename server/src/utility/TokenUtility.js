@@ -6,7 +6,7 @@ const { JWT_EXPIRE_TIME, JWT_KEY } = process.env
 
 export const EncodedToken = (email,user_id, role) => {
     let KEY = JWT_KEY
-    let EXPIRE  = {expiresIn: JWT_EXPIRE_TIME}
+    let EXPIRE  = {expiresIn: '7d'}
     let PAYLOAD = {
         email : email,
         user_id : user_id,

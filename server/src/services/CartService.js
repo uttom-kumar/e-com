@@ -37,7 +37,7 @@ export const CreateCartService = async (req, res) => {
             existingCartItem.size = size;
             await existingCartItem.save();
 
-            return res.status(200).json({
+            return res.status(201).json({
                 status: 'success',
                 message: 'Cart quantity updated successfully',
                 data: existingCartItem,
@@ -154,7 +154,6 @@ export const UpdateCartService = async (req, res) => {
 export const ReadCartService = async (req, res) => {
     try{
         const userID = new ObjectId(req.headers.user_id);
-
         const MatchStage = {
             $match : {userID : userID}
         }

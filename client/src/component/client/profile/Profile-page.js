@@ -25,13 +25,16 @@ const ProfilePage = () => {
     const passToggleEdit = () => setPassEdit(!isPassEdit);
 
     const profileData = useSelector((state) => state.ProfileData.profileData)
-    console.log(profileData)
 
     useEffect(() => {
-        (async () => {
-            await UserReadProfileRequest()
-        })()
-    }, []);
+        // Only call API if profileData is empty
+        if (!profileData || profileData.length === 0) {
+            (async () => {
+                await UserReadProfileRequest();
+            })();
+        }
+    }, [profileData]);
+
 
     useEffect(() => {
         if (profileData && profileData.length > 0) {

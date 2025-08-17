@@ -12,6 +12,7 @@ import { isUserLoggedIn } from "@/component/Utility/Helper";
 import { LogoutRequest } from "@/component/Request-Api/UserAuth";
 import toast from "react-hot-toast";
 import NavSearchButton from "@/component/Nav/Nav-Search-Button";
+import {useSelector} from "react-redux";
 
 const AppNavbar = () => {
     const pathname = usePathname();
@@ -19,6 +20,10 @@ const AppNavbar = () => {
     const [searchOpen, setSearchOpen] = useState(false);
     const profileMenuRef = useRef(null);
     const searchContainerRef = useRef(null);
+    const ProductList = useSelector((state) => state.productList.productList);
+    const totalCart = useSelector((state)=> state.cartList.totalCart);
+    const totalWish = useSelector((state)=> state.wishList.totalWish);
+
 
     const token = isUserLoggedIn();
 
@@ -31,8 +36,8 @@ const AppNavbar = () => {
     const items = [
         { path: '/', icon: <IoHomeOutline size={20} />, text: 'Home' },
         { path: '/products', icon: <AiOutlineProduct size={20} />, text: 'Products' },
-        { path: '/add-cart', icon: <IoBagOutline size={20} />, text: 'Add Cart', count: 20 },
-        { path: '/wishes', icon: <GiSelfLove size={20} />, text: 'Wishes', count: 3 },
+        { path: '/add-cart', icon: <IoBagOutline size={20} />, text: 'Cart', count: totalCart},
+        { path: '/wishes', icon: <GiSelfLove size={20} />, text: 'Wish', count:  totalWish},
         { path: '/order', icon: <GrDeliver size={20} />, text: 'Order' },
     ];
 
@@ -142,20 +147,26 @@ const AppNavbar = () => {
                         {profileMenuOpen && (
                             <>
                                 {token ? (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow">
-                                        <ul className="text-sm text-gray-700">
-                                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                                <Link className="flex items-center gap-2" onClick={toggleProfileClose} href="/profile">
-                                                    <CiUser size={15} /> Profile
-                                                </Link>
-                                            </li>
-                                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                                <button onClick={logout} className="flex gap-2 items-center w-full text-left cursor-pointer">
-                                                    <AiOutlineLogout size={15} /> Log out
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                        <div
+                                            className={`absolute top-12 right-0 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 ease-in-out ${
+                                                profileMenuOpen
+                                                    ? 'opacity-100 scale-100 translate-y-0'
+                                                    : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+                                            } w-[150px]`}
+                                        >
+                                            <ul className="text-sm text-gray-700">
+                                                <li className=" py-2 hover:bg-gray-100 cursor-pointer  flex justify-center  ">
+                                                    <Link className="flex items-center gap-2" onClick={toggleProfileClose} href="/profile">
+                                                        <CiUser size={15} /> Profile
+                                                    </Link>
+                                                </li>
+                                                <li className=" py-2 hover:bg-gray-100  cursor-pointer text-center">
+                                                    <button onClick={logout} className="flex gap-2 items-center w-full  justify-center cursor-pointer">
+                                                        <AiOutlineLogout size={15} /> Log out
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                 ) : (
                                     <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow">
                                         <Link onClick={toggleProfileClose} className="hover:text-blue-600 py-2 text-center block" href="/login">

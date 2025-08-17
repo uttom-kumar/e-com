@@ -1,10 +1,11 @@
 'use client';
 import React from 'react';
-import TShirtCollection from "@/component/client/Home/T-Shirt-Collection";
+import TradingProduct from "@/component/client/Home/TradingProduct";
 import BannerSection from "@/component/client/Home/BannerSection";
 import Features from "@/component/client/Home/Features";
 import CategorySection from "@/component/client/Home/CategorySection";
 import ProductLists from "@/component/client/Home/ProductLists";
+import TopSellProduct from "@/component/client/Home/TopSellProduct";
 
 
 const AllProductList = () => {
@@ -14,7 +15,8 @@ const AllProductList = () => {
             <BannerSection />
             <Features />
             <CategorySection />
-            <TShirtCollection />
+            <TradingProduct />
+            <TopSellProduct />
             <ProductLists />
         </div>
     );

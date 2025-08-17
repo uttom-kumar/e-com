@@ -8,12 +8,15 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { LoginRequest } from "@/component/Request-Api/UserAuth";
 import { useRouter } from "next/navigation";
+import LoadingButton from "@/component/client/common/LoadingButton";
+import {useSelector} from "react-redux";
 
 const LoginComponent = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const isLoading = useSelector(state => state.loading.isLoading)
 
     // Handle input change
     const onchangeValue = (e) => {
@@ -40,11 +43,11 @@ const LoginComponent = () => {
         }
 
         let res = await LoginRequest(reqbody);
-        console.log(res);
         if (res === true) {
             setEmail("");
             setPassword("");
             router.push('/profile');
+            toast.success("Login Successfully");
         }
     };
 
@@ -126,12 +129,13 @@ const LoginComponent = () => {
                         </div>
 
                         {/* Submit Button */}
-                        <button
-                            className="cursor-pointer w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white rounded-lg py-2 mt-2 text-sm font-medium shadow-md hover:shadow-lg transition-shadow"
+                        <LoadingButton
                             type="submit"
-                        >
-                            Get Started
-                        </button>
+                            onClick={submitFrom}
+                            text="Get Started"
+                            isLoading={isLoading}
+                            disabled={false}
+                        />
                     </form>
 
                     <div className="dotted-line-text mt-3">

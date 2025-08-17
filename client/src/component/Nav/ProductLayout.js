@@ -2,18 +2,16 @@
 import React, { useState } from 'react';
 import ProductNav from "@/component/Nav/product-nav";
 import ProductList from "@/component/client/Product/Product-List";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const ProductLayout = () => {
-    const Data = useSelector((state) => state.DataList.data);
+    const productListData = useSelector((state) => state.productList.productList);
     const [selectedCategory, setSelectedCategory] = useState('');
 
-
-    const categories = [...new Set(Data.map(item => item.category))];
-
+    const categories = [...new Set(productListData?.map(item => item?.category))];
 
     return (
-        <div className=" min-h-screen">
+        <div className="min-h-screen">
             <ProductNav />
 
             <div className="container mx-auto py-5">
@@ -21,7 +19,6 @@ const ProductLayout = () => {
 
                     {/* Filter Sidebar */}
                     <aside className="w-full md:max-w-xs h-[100%] bg-white p-6 rounded-xl shadow-md">
-                        <h2 className="text-xl font-semibold mb-6">Filters</h2>
 
                         {/* Category Select */}
                         <div className="mb-6">
@@ -39,9 +36,9 @@ const ProductLayout = () => {
                                     onChange={(e) => setSelectedCategory(e.target.value)}
                                 >
                                     <option disabled value="">Choose Category</option>
-                                    {categories.map((category, index) => (
+                                    {categories?.map((category, index) => (
                                         <option key={index} value={category}>
-                                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                                            {category.categoryName}
                                         </option>
                                     ))}
                                 </select>
@@ -60,7 +57,6 @@ const ProductLayout = () => {
                                 </div>
                             </div>
                         </div>
-
 
                         {/* Price Range */}
                         <div>

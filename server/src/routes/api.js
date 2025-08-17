@@ -8,6 +8,7 @@ import * as CartController from "../controllers/CartController.js";
 import * as CategoryController from "../controllers/CategoryController.js";
 import * as ProductController from "../controllers/ProductController.js";
 import * as WishController from "../controllers/WishController.js";
+import {ReadCategory} from "../controllers/CategoryController.js";
 
 // user API
 router.post('/Register',UserController.Register)
@@ -26,6 +27,7 @@ router.post('/UpdatePassword', AuthMiddleware, UserController.UpdatePassword)
 
 // categories
 router.post('/CreateCategory', AuthMiddleware, RoleMiddleware(['admin']), CategoryController.CreateCategory)
+router.get('/ReadCategory', CategoryController.ReadCategory)
 
 // Products
 router.post('/CreateProduct', AuthMiddleware, RoleMiddleware(['admin']), ProductController.CreateProduct)
@@ -40,7 +42,7 @@ router.get('/ProductDetail/:id', ProductController.ProductDetail)
 
 // add cart products
 router.post('/CreateCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.CreateCart)
-router.post('/DeleteCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.DeleteCart)
+router.get('/DeleteCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.DeleteCart)
 router.post('/UpdateCart/:id', AuthMiddleware, RoleMiddleware(['user']), CartController.UpdateCart)
 router.get('/ReadCart', AuthMiddleware, RoleMiddleware(['user']), CartController.ReadCart)
 

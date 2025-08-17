@@ -55,3 +55,20 @@ export const CreateCategoryService = async (req, res) => {
         });
     }
 };
+
+export const ReadCategoryService = async (req, res) => {
+    try {
+        const data = await CategoryModel.find();
+        return res.status(200).json({
+            status: "success",
+            message: "Categories fetched successfully",
+            data: data
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong",
+            error: err.toString()
+        })
+    }
+}

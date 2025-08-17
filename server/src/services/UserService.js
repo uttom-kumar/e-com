@@ -94,7 +94,7 @@ export const LoginService = async (req, res) => {
         }
 
         // 3. Validate password
-        const isPasswordValid = await bcrypt.compare(password, userPassword.password);
+        const isPasswordValid = await bcrypt.compare(password, userPassword['password']);
         if (!isPasswordValid) {
             return res.status(400).json({
                 status: "failed",
@@ -103,7 +103,7 @@ export const LoginService = async (req, res) => {
         }
 
         // 4. Create token
-        const token = EncodedToken(user.email, user._id, user.role);
+        const token = EncodedToken(user['email'], user['_id'], user['role']);
 
         // 5. Set token in cookie
         const options = {

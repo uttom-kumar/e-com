@@ -5,7 +5,7 @@ class Helper {
         if(code===401){
             sessionStorage.clear();
             localStorage.clear();
-            Cookies.remove('student');
+            Cookies.remove('token');
             window.location.href="/login"
         }
     }

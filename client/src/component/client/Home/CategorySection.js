@@ -1,4 +1,6 @@
 import Image from "next/image";
+import {useSelector} from "react-redux";
+import Link from "next/link";
 
 const categories = [
     { name: "T-Shirt", icon: "/icons/tshirt.svg" },
@@ -14,6 +16,8 @@ const categories = [
 ];
 
 const CategorySection = () => {
+    const CategoryList = useSelector(state => state.category.category)
+
     return (
         <section className="pb-14 pt-10 bg-gray-50">
             <div className="text-center mb-10">
@@ -24,21 +28,25 @@ const CategorySection = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-6 max-w-7xl mx-auto px-4">
-                {categories.map((cat, index) => (
+                {CategoryList.map((cat, index) => (
                     <div
                         key={index}
-                        className="bg-white rounded-xl shadow-sm p-5 flex flex-col items-center hover:shadow-md hover:scale-105 transition-all duration-300"
+                        className="bg-white rounded-xl shadow-sm flex flex-col items-center hover:shadow-md hover:scale-105 transition-all duration-300"
                     >
-                        <div className="w-16 h-16 mb-3 flex items-center justify-center rounded-full bg-gray-100">
-                            <Image
-                                src={cat.icon}
-                                alt={cat.name}
-                                width={40}
-                                height={40}
-                                className="object-contain"
-                            />
-                        </div>
-                        <span className="text-gray-700 text-sm font-medium text-center">{cat.name}</span>
+                        <Link href={`/products/${cat.categoryName}`} passHref={true}>
+                            <div className="w-20 h-20 mb-3 flex items-center justify-center ">
+                                <Image
+                                    src={cat.image}
+                                    alt={cat.categoryName}
+                                    width={40}
+                                    height={40}
+                                    className="object-contain w-full h-full aspect-square "
+                                />
+                            </div>
+                            <div className={'px-2 pb-2'}>
+                                <span className="text-gray-700 text-sm font-medium text-center">{cat.categoryName}</span>
+                            </div>
+                        </Link>
                     </div>
                 ))}
             </div>
