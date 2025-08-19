@@ -14,6 +14,7 @@ import {CreateCartRequest, ReadCartRequest} from "@/component/Request-Api/CartRe
 import toast from "react-hot-toast";
 import {GiSelfLove} from "react-icons/gi";
 import {CreateWishRequest, ReadWishRequest} from "@/component/Request-Api/WishRequest";
+import LoadingButton from "@/component/client/common/LoadingButton";
 
 const StarRatings = dynamic(() => import('react-star-ratings'), { ssr: false })
 
@@ -213,18 +214,31 @@ const ProductDetails = () => {
                                             Total: ৳{product?.discountPrice * quantity}
                                         </p>
                                         <div className={'flex gap-5'}>
-                                            <button
-                                                onClick={() =>handleWishHandler(product?._id)}
-                                                className="cursor-pointer flex items-center gap-1 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-700 transition-all w-full md:w-auto"
-                                            >
-                                                <GiSelfLove size={20} /><span>Add Wishes</span>
-                                            </button>
-                                            <button
+                                            <LoadingButton
+                                                className={'cursor-pointer  bg-blue-500' +
+                                                    ' text-white px-6 py-2 rounded hover:bg-blue-700 transition-all w-full md:w-auto'}
+                                                type={'button'}
+                                                isLoading={isLoading}
+                                                disabled={isLoading}
+                                                onClick={()=>handleWishHandler(product?._id)}
+                                                text={
+                                                    <div className={'flex items-center gap-1'}>
+                                                        <GiSelfLove size={20} /><span>Add Wishes</span>
+                                                    </div>
+                                                }
+                                            />
+                                            <LoadingButton
                                                 onClick={()=>handleAddToCart(product?._id)}
                                                 className="flex items-center gap-1 cursor-pointer bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-700 transition-all w-full md:w-auto"
-                                            >
-                                                <IoBagOutline size={20} /><span>Add to Cart</span>
-                                            </button>
+                                                type={'button'}
+                                                isLoading={isLoading}
+                                                disabled={isLoading}
+                                                text={
+                                                    <div className={'flex items-center gap-1'}>
+                                                        <IoBagOutline size={20} /><span>Add to Cart</span>
+                                                    </div>
+                                                }
+                                            />
                                         </div>
                                     </div>
                                 </div>

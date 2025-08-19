@@ -8,7 +8,9 @@ import Link from "next/link";
 const TopSellProduct = () => {
     const ProductList = useSelector((state) => state.productList.productList);
 
-    const categoryProducts = ProductList?.filter(item => item.category === 't-shirt');
+    console.log(ProductList)
+
+    const categoryProducts = ProductList?.filter(item => item.remark === 'top-sell');
 
     if(categoryProducts.length === 0){
         return null;

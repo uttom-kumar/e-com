@@ -63,13 +63,13 @@ const CartPage = () => {
 
                                             {/* Price */}
                                             <td className="p-3 text-center">
-                                                {totalPrice}
+                                                {data?.product?.discount === true ?  (<>{data?.product?.discountPrice*data?.qty}</>) : (<> {data?.product?.price*data?.qty}</>)}
                                             </td>
 
                                             {/* Quantity */}
                                             <td className="p-3 text-center">
                                                 <div className="flex justify-center items-center gap-2">
-                                                    <p>{totalQty}</p>
+                                                    <p>{data?.qty}</p>
                                                 </div>
                                             </td>
                                             <td className="p-3 text-center">
