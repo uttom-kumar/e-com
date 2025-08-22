@@ -12,8 +12,6 @@ export default function Home() {
         (async () => {
             await CategoryReadRequest();
             await ProductListRead()
-            await ReadCartRequest()
-            await ReadWishRequest()
         })()
     }, []);
 

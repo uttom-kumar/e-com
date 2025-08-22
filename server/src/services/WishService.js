@@ -9,7 +9,6 @@ const ObjectId = mongoose.Types.ObjectId;
 export const SaveWishService = async (req, res) => {
     try{
         const userID = req.headers.user_id
-        console.log(userID)
         const productID = req.params.id
 
         const user = await UserModel.findOne({_id : userID})
